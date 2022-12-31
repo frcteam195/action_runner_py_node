@@ -7,16 +7,19 @@ from typing import List
 
 from frc_robot_utilities_py_node.frc_robot_utilities_py import *
 from frc_robot_utilities_py_node.RobotStatusHelperPy import RobotStatusHelperPy, Alliance, RobotMode
-from default_actions.SeriesAction import SeriesAction
+from action_runner_py_node.default_actions.SeriesAction import SeriesAction
+from action_runner_py_node.game_specific_actions.MoveElevatorAction import MoveElevatorAction
 
 active_action:SeriesAction = None
 
 def start_action(action:SeriesAction):
+    global active_action
     active_action = action
-    if action is not None:
+    if active_action is not None:
         try:
             active_action.start()
         except:
+            rospy.logerr("Exception encountered starting action")
             active_action = None
 
 def ros_func():
@@ -37,6 +40,9 @@ def ros_func():
                     active_action.update()
         else:
             active_action = None
+
+        eaction = MoveElevatorAction(5)
+        start_action(eaction)
 
         rate.sleep()
 

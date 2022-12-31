@@ -1,4 +1,4 @@
-from Action import Action
+from action_runner_py_node.default_actions.Action import Action
 from datetime import datetime
 
 class WaitAction(Action):
